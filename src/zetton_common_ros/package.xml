@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>zetton_common_ros</name>
+  <version>2.0.0</version>
+  <description>ROS wrapper for common definitions and utilities in ROS environment for Project Zetton.</description>
+  <maintainer email="xxdsox@gmail.com">Yusu Pan</maintainer>
+  <license>BSD 2-Clause</license>
+  <url type="repository">https://github.com/project-zetton/zetton-ros-vendor</url>
+  <author>Yusu Pan</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend>
+  <depend>zetton_common</depend>
+
+</package>
