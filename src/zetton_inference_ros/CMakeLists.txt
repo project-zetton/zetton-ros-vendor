@@ -50,7 +50,7 @@ project(
 
 find_package(zetton_common REQUIRED)
 find_package(zetton_stream REQUIRED)
-# find_package(zetton_inference REQUIRED)
+find_package(zetton_inference REQUIRED)
 
 # -------------#
 # ROS packages #
@@ -143,7 +143,7 @@ zetton_cc_library(
   ${catkin_LIBRARIES}
   zetton_common::zetton_common
   zetton_stream::zetton_stream
-  # zetton_inference::zetton_inference
+  zetton_inference::zetton_inference
 )
 
 # -------------------#

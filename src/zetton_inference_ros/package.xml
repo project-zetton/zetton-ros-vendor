@@ -22,6 +22,6 @@
 
   <depend>zetton_common</depend>
   <depend>zetton_stream</depend>
-  <!-- <depend>zetton_inference</depend> -->
+  <depend>zetton_inference</depend>
 
 </package>
