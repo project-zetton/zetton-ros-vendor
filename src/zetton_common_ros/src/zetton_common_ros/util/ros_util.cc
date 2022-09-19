@@ -3,7 +3,7 @@
 namespace zetton {
 namespace common {
 
-RosNodeHandler::RosNodeHandler(){};
+RosNodeHandler::RosNodeHandler(){}
 
 }  // namespace common
 }  // namespace zetton

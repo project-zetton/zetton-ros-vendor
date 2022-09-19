@@ -9,6 +9,7 @@
 #include "ros/package.h"
 #include "ros/ros.h"
 #include "zetton_inference/detector/yolo_object_detector.h"
+#include "zetton_inference/util/viz_util.h"
 #include "zetton_stream/stream/cv_gst_stream_source.h"
 
 #define SHOW_GUI false
@@ -21,7 +22,7 @@ class RtspYoloObjectDetector {
   bool IsOpened();
   void Close();
   bool Capture(cv::Mat& frame,
-               zetton::inference::ObjectDetectionResults& result);
+               std::vector<zetton::inference::ObjectPtr>& result);
   bool IsEmpty();
 
   void SetProbThresh(float m_prob_thresh);
@@ -41,7 +42,7 @@ class RtspYoloObjectDetector {
   std::shared_ptr<std::thread> thread_;
 
   std::mutex mutex_;
-  std::queue<std::pair<cv::Mat, zetton::inference::ObjectDetectionResults>>
+  std::queue<std::pair<cv::Mat, std::vector<zetton::inference::ObjectPtr>>>
       queue_;
 };
 
@@ -55,7 +56,7 @@ void RtspYoloObjectDetector::Process() {
   while (!stop_flag_) {
     cv::Mat frame;
     if (streamer_->Capture(frame)) {
-      zetton::inference::ObjectDetectionResults results;
+      std::vector<zetton::inference::ObjectPtr> results;
       detector_->Detect(frame, results);
       std::lock_guard<std::mutex> lock(mutex_);
       queue_.push(std::make_pair(frame, results));
@@ -85,7 +86,7 @@ bool RtspYoloObjectDetector::IsOpened() { return streamer_->IsStreaming(); }
 void RtspYoloObjectDetector::Close() { stop_flag_ = true; }
 
 bool RtspYoloObjectDetector::Capture(
-    cv::Mat& frame, zetton::inference::ObjectDetectionResults& result) {
+    cv::Mat& frame, std::vector<zetton::inference::ObjectPtr>& result) {
   std::lock_guard<std::mutex> lock(mutex_);
   auto pair = queue_.front();
   frame = pair.first;
@@ -138,7 +139,7 @@ int main(int argc, char** argv) {
   AINFO_F("Starting detection");
   while (detector.IsOpened()) {
     cv::Mat frame;
-    zetton::inference::ObjectDetectionResults results;
+    std::vector<zetton::inference::ObjectPtr> results;
     if (!detector.IsEmpty()) {
       // read frame from stream and detect objects by detector
       detector.Capture(frame, results);
@@ -149,7 +150,7 @@ int main(int argc, char** argv) {
       // show results in GUI
       if (SHOW_GUI) {
         for (auto& result : results) {
-          result.Draw(frame);
+          zetton::inference::DrawBoundingBoxOnCvImage(frame, result);
         }
         cv::imshow("Results", frame);
         char key = cv::waitKey(10);

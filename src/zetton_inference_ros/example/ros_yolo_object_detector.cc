@@ -28,7 +28,7 @@ class RosYoloObjectDetector {
     }
 
     // do detection
-    zetton::inference::ObjectDetectionResults results;
+    std::vector<zetton::inference::ObjectPtr> results;
     detector_.Detect(cv_ptr->image, results);
 
     // print results

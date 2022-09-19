@@ -13,6 +13,7 @@
 #include "zetton_common_ros/util/ros_util.h"
 #include "zetton_inference/detector/yolo_object_detector.h"
 #include "zetton_inference/tracker/sort_tracker.h"
+#include "zetton_inference/util/viz_util.h"
 
 void signalHandler(int sig) {
   AWARN_F("Trying to exit!");
@@ -32,7 +33,7 @@ class RosMotTracker {
     }
 
     // do detection
-    zetton::inference::ObjectDetectionResults detections;
+    std::vector<zetton::inference::ObjectPtr> detections;
     detector_.Detect(cv_ptr->image, detections);
 
     // do tracking
@@ -42,7 +43,7 @@ class RosMotTracker {
     AINFO_F("Detections:");
     for (auto& detection : detections) {
       AINFO << detection;
-      detection.Draw(cv_ptr->image);
+      zetton::inference::DrawBoundingBoxOnCvImage(cv_ptr->image, detection);
     }
     AINFO_F("Trackings:");
     for (auto& track : tracker_.tracks()) {
