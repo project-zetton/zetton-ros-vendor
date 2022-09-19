@@ -46,10 +46,14 @@ class RosMotTracker {
       zetton::inference::DrawBoundingBoxOnCvImage(cv_ptr->image, detection);
     }
     AINFO_F("Trackings:");
+    zetton::inference::VisualizationOptions viz_options;
+    viz_options.background_color = {255, 255, 0};
+    viz_options.text_color = {255, 255, 0};
     for (auto& track : tracker_.tracks()) {
       // if (track.tracking_fail_count <= 3) {
       AINFO << track;
-      track.Draw(cv_ptr->image);
+      zetton::inference::DrawBoundingBoxOnCvImage(cv_ptr->image, track,
+                                                  viz_options);
       // }
     }
 
