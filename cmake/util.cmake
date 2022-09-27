@@ -23,6 +23,15 @@ macro(add_simple_examples)
   add_simple_excutables("example")
 endmacro()
 
+macro(fetch_googletest)
+  include(FetchContent)
+  FetchContent_Declare(
+    googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG release-1.12.1)
+  FetchContent_MakeAvailable(googletest)
+endmacro()
+
 # add tests with project library
 macro(add_simple_test dirname name)
   add_executable(${dirname}_${name}

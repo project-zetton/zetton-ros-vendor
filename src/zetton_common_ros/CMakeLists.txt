@@ -36,6 +36,9 @@ project(
   VERSION ${extracted_version}
   LANGUAGES CXX)
 
+# useful macros
+include(${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/util.cmake)
+
 # =============#
 # Dependencies #
 # =============#
@@ -44,6 +47,7 @@ project(
 # Third-party libraries #
 # ----------------------#
 
+fetch_googletest()
 find_package(catkin REQUIRED COMPONENTS roscpp)
 
 # -----------------#
@@ -94,9 +98,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_definitions(-O2)
-
-# useful macros
-include(${CMAKE_CURRENT_SOURCE_DIR}/../../cmake/util.cmake)
 
 # ##############################################################################
 # Build #
