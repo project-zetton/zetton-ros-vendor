@@ -12,8 +12,7 @@ import rospy
 
 
 class PublisherNode:
-
-    def __init__(self, filepath=None, is_video=False, topic='/camera/image'):
+    def __init__(self, filepath=None, is_video=False, topic="/camera/image"):
         self.filepath = filepath
         self.is_video = is_video
         if self.filepath is not None:
@@ -40,12 +39,17 @@ class PublisherNode:
             font_scale = 1
             font_color = (255, 255, 255)
             line_type = 2
-            text = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
-            self.image = np.random.randint(255,
-                                           size=(720, 1280, 3),
-                                           dtype=np.uint8)
-            cv2.putText(self.image, text, bottom_left_corner_of_text, font,
-                        font_scale, font_color, line_type)
+            text = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+            self.image = np.random.randint(255, size=(720, 1280, 3), dtype=np.uint8)
+            cv2.putText(
+                self.image,
+                text,
+                bottom_left_corner_of_text,
+                font,
+                font_scale,
+                font_color,
+                line_type,
+            )
         elif not self.is_video:
             self.image = self.source
         else:
@@ -54,13 +58,12 @@ class PublisherNode:
                 ret, self.image = self.source.read()
                 if not ret:
                     self.source.set(cv2.CAP_PROP_POS_FRAMES, 0)
-                    print('shift back to the begining')
+                    print("shift back to the begining")
 
     def publish(self):
         try:
             self.read_image()
-            self.image_pub.publish(self.bridge.cv2_to_imgmsg(
-                self.image, 'bgr8'))
+            self.image_pub.publish(self.bridge.cv2_to_imgmsg(self.image, "bgr8"))
         except CvBridgeError as e:
             print(e)
 
@@ -75,19 +78,20 @@ class PublisherNode:
 def main():
     # parse args
     parser = argparse.ArgumentParser(
-        description='Publish image to ROS topic from local file')
-    parser.add_argument('-i', '--input', type=str)
-    parser.add_argument('--is_video', action='store_true')
+        description="Publish image to ROS topic from local file"
+    )
+    parser.add_argument("-i", "--input", type=str)
+    parser.add_argument("--is_video", action="store_true")
     opt = parser.parse_args()
 
     # start ROS node
-    rospy.init_node('image_publisher', anonymous=True)
+    rospy.init_node("image_publisher", anonymous=True)
     node = PublisherNode(filepath=opt.input, is_video=opt.is_video)
     try:
         node.start()
     except KeyboardInterrupt:
-        print('Shutting down')
+        print("Shutting down")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

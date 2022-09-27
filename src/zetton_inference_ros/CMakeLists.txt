@@ -44,18 +44,6 @@ project(
 # Third-party libraries #
 # ----------------------#
 
-# -----------------#
-# Zetton libraries #
-# -----------------#
-
-find_package(zetton_common REQUIRED)
-find_package(zetton_stream REQUIRED)
-find_package(zetton_inference REQUIRED)
-
-# -------------#
-# ROS packages #
-# -------------#
-
 find_package(
   catkin REQUIRED
   COMPONENTS roscpp
@@ -66,6 +54,19 @@ find_package(
              sensor_msgs
              message_generation
              zetton_common_ros)
+
+# -----------------#
+# Zetton libraries #
+# -----------------#
+
+find_package(zetton_common REQUIRED)
+find_package(zetton_stream REQUIRED)
+find_package(zetton_inference REQUIRED)
+
+# =============#
+# ROS Settings #
+# =============#
+
 # catkin_python_setup()
 catkin_package(
   INCLUDE_DIRS
@@ -143,8 +144,7 @@ zetton_cc_library(
   ${catkin_LIBRARIES}
   zetton_common::zetton_common
   zetton_stream::zetton_stream
-  zetton_inference::zetton_inference
-)
+  zetton_inference::zetton_inference)
 
 # -------------------#
 # Executable targets #
